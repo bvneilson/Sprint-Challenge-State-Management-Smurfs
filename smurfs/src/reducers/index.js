@@ -15,16 +15,25 @@ export const reducer = (state = initialState, action) => {
       axios.post('http://localhost:3333/smurfs', action.payload)
         .then(res => {
             console.log(res.data);
-            //dispatch({ type: POST_DATA_SUCCESS, payload: apiData });
-            //let newSmurf = res.data;
         })
         .catch(error => {
             console.log(error);
-            //dispatch({ type: POST_DATA_FAIL, payload: apiData });
         })
         return {
           ...state,
           smurfs: [...state.smurfs, action.payload]
+        }
+    case 'DELETE_SMURF':
+      axios.delete(`http://localhost:3333/smurfs/${action.payload}`)
+        .then(res => {
+            console.log(res.data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        return {
+          ...state,
+          smurfs: state.smurfs.filter(smurf => smurf.id !== action.payload)
         }
     default:
       return state;
