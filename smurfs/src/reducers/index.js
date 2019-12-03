@@ -1,7 +1,8 @@
 import axios from 'axios';
+import { SET_SMURFS, NEW_SMURF, DELETE_SMURF } from '../actions';
 
 const initialState = {
-  smurfs: null,
+  smurfs: [],
 }
 
 export const reducer = (state = initialState, action) => {
