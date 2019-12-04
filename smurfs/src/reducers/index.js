@@ -1,40 +1,60 @@
-import axios from 'axios';
-import { SET_SMURFS, NEW_SMURF, DELETE_SMURF } from '../actions';
+import { SET_SMURFS,
+  NEW_SMURF_START,
+  NEW_SMURF_SUCCESS,
+  NEW_SMURF_FAIL,
+  DELETE_SMURF_START,
+  DELETE_SMURF_SUCCESS,
+  DELETE_SMURF_FAIL } from '../actions';
 
 const initialState = {
   smurfs: [],
+  error: '',
+  isFetching: false
 }
 
 export const reducer = (state = initialState, action) => {
+  console.log('reducer', action)
   switch (action.type) {
     case 'SET_SMURFS':
       return {
         ...state,
         smurfs: action.payload
       }
-    case 'NEW_SMURF':
-      axios.post('http://localhost:3333/smurfs', action.payload)
-        .then(res => {
-            console.log(res.data);
-        })
-        .catch(error => {
-            console.log(error);
-        })
+    case 'NEW_SMURF_START':
         return {
           ...state,
-          smurfs: [...state.smurfs, action.payload]
+          isFetching: true,
+          error: ''
         }
-    case 'DELETE_SMURF':
-      axios.delete(`http://localhost:3333/smurfs/${action.payload}`)
-        .then(res => {
-            console.log(res.data);
-        })
-        .catch(error => {
-            console.log(error);
-        })
+    case 'NEW_SMURF_SUCCESS':
         return {
           ...state,
-          smurfs: state.smurfs.filter(smurf => smurf.id !== action.payload)
+          smurfs: action.payload,
+          isFetching: false,
+          error: ''
+        }
+    case 'NEW_SMURF_FAIL':
+        return {
+          ...state,
+          error: action.payload
+        }
+    case 'DELETE_SMURF_START':
+        return {
+          ...state,
+          isFetching: true,
+          error: ''
+        }
+    case 'DELETE_SMURF_SUCCESS':
+        return {
+          ...state,
+          smurfs: action.payload,
+          isFetching: false,
+          error: ''
+        }
+    case 'DELETE_SMURF_FAIL':
+        return {
+          ...state,
+          error: action.payload
         }
     default:
       return state;
